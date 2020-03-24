@@ -1,0 +1,60 @@
+#login {
+	width: 100%;
+	height: 100vh;
+	position: relative;
+	background-image: url("../../assets/imgs/trees.png");
+	background-size: auto;
+	background-repeat: repeat;
+
+	.loginCard {
+		width: 340px;
+		height: 360px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: auto;
+
+		.title {
+			padding: 15px 0 25px 0;
+			font-size: 24px;
+			font-weight: bold;
+			text-align: center;
+		}
+
+		.loginForm {
+			width: 270px;
+			margin: 0 auto;
+
+			.validateBox {
+				.el-button {
+					font-size: 12px;
+					margin-left: 10px;
+				}
+				.el-input-group__append {
+					padding: 0;
+					span {
+						display: block;
+						height: 38px;
+						cursor: pointer;
+					}
+				}
+			}
+
+			.submitBtn {
+				width: 100%;
+			}
+
+			.tips {
+				color: #999999;
+				font-size: 12px;
+
+				span {
+					color: #409EFF;
+					font-size: 14px;
+				}
+			}
+		}
+	}
+}
