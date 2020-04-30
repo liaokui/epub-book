@@ -5,6 +5,13 @@
 	background-image: url("../../assets/imgs/trees.png");
 	background-size: auto;
 	background-repeat: repeat;
+	.title {
+		padding-top: calc(50vh - 270px);
+		color: #666666;
+		font-size: 30px;
+		font-weight: bold;
+		text-align: center;
+	}
 
 	.loginCard {
 		width: 340px;

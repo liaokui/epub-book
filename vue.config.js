@@ -1,5 +1,6 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? './public/client/dist/' : '/',
+  // publicPath: process.env.NODE_ENV === 'production' ? './public/client/dist/' : '/',
+  publicPath: './',
   assetsDir: 'static',
   lintOnSave: true,
   productionSourceMap: false,
@@ -22,7 +23,19 @@ module.exports = {
     proxy: {
       '/api': {
         // 目标 API 地址
-        target: 'http://172.16.30.33:9004',
+        target: 'http://127.0.0.1:7002',
+        // target: 'http://150.109.105.237:7001',
+        // target: 'http://172.16.30.33:9004',
+        // 如果要代理 websockets
+        ws: false,
+        // 将主机标头的原点更改为目标URL
+        changeOrigin: true
+      },
+      '/public': {
+        // 目标 API 地址
+        target: 'http://127.0.0.1:7002',
+        // target: 'http://150.109.105.237:7001',
+        // target: 'http://172.16.30.33:9004',
         // 如果要代理 websockets
         ws: false,
         // 将主机标头的原点更改为目标URL
@@ -49,6 +62,6 @@ module.exports = {
 
   // 第三方插件的选项
   pluginOptions: {
-
+    
   }
 }

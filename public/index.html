@@ -18,9 +18,12 @@
   <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
   <script>window.VueRouter || document.write('<script src="<%= BASE_URL %>js/vue-router.min.js"><\/script>')</script>
   <% } %>
+  <script type="text/javascript" src="./js/epub.js"></script>
+  <script type="text/javascript" src="./js/zip.min.js"></script>
 </head>
 
 <body>
+  <h3><%= BASE_URL %></h3>
   <noscript>
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
       Please enable it to continue.</strong>

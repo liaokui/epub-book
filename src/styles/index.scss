@@ -49,19 +49,22 @@ a:hover {
   }
 }
 
-//面包屑
-.el-breadcrumb {
-  padding: 20px 0 20px 0;
+.wordOverFlow {
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
 }
 
-//搜索框
-.search-box {
-  .el-input {
-    width: 150px;
-  }
+.wordOverFlow2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
-//操作区域
-.handle-box {
-  padding: 0 0 15px 15px;
+.wordOverFlow3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }

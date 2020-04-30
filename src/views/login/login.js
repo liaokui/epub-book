@@ -1,4 +1,5 @@
 import { getCaptcha, login } from './login.server.js'
+import { setToken, setUsername, setUid } from '../../utils/auth.js'
 
 export default {
   components: {},
@@ -46,22 +47,25 @@ export default {
             'code': this.loginForm.code,
           }
           this.loading = true;
-          console.log(params);
           login(params).then(res => {
             this.loading = false
-            if (res.code === 200) {
+            if (res && res.status === 'success') {
               this.$message({
                 message: res.msg,
                 type: 'success'
               })
+              setToken(res.token)
+              setUsername(res.data.username)
+              setUid(res.data.uid)
               setTimeout(() => {
-                this.$router.push({path: '/error'});
+                this.$router.push({path: '/list'});
               }, 500);
             } else {
               this.$message({
                 message: res.msg,
                 type: 'warning'
               })
+              this.getCode()
             }
           }, () => {
             this.$message({
@@ -69,6 +73,7 @@ export default {
               type: 'error'
             })
             this.loading = false;
+            this.getCode()
           });
         } else {
           return false;
