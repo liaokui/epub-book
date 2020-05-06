@@ -34,9 +34,11 @@ export default {
       themesObj: {},
       theme: null,
       display: null,
+      currentChapterList: [],
       currentChapter: {},
       bookInfo: {},
       chapterDetailList: [],
+      chapterList: [],
       // 文字菜单
       wordMenuStatus: false,
       wordMenuMode: 'add', // 'add' || 'edit'
@@ -126,54 +128,81 @@ export default {
         this.bookLoading = false;
         this.getTheme()
         // 生成目录
-        this.chapterDetailList = await Promise.all(
-          this.book.navigation.toc.map(async item => {
-            let knot = []
-            if (item.subitems.length > 0) {
-              knot = await Promise.all(
-                item.subitems.map( async val => {
+        this.chapterDetailList = this.book.navigation.toc.map( item => {
+          let knot = []
+          if (item.subitems.length > 0) {
+            knot = item.subitems.map( val => {
+              let secondaryKnot = []
+              if (val.subitems.length > 0) {
+                secondaryKnot = val.subitems.map( v => {
                   return {
-                    id: val.id,
-                    cfi: await this.searchChapter(val.href),
-                    label: val.label,
-                    href: val.href,
-                  }
-                })
-              ); 
-            }
-            return {
-              id: item.id,
-              cfi: await this.searchChapter(item.href),
-              label: item.label,
-              href: item.href,
-              knot,
-              unfold: true
-            }
-          })
-        )
-        // 章节变化
-        this.bookRendition.on('rendered', (section) => {
-          console.log('章节变化');
-          this.chapterDetailList.some( item => {
-            if (item.href.split('#')[0] === section.href.split('#')[0]) {
-              this.currentChapter = item
-              return true
-            } else {
-              if (item.knot.length > 0) {
-                item.knot.some( val => {
-                  if (val.href.split('#')[0] === section.href.split('#')[0]) {
-                    this.currentChapter = val
-                    item.unfold = true
-                    return true
-                  } else {
-                    return false
+                    id: v.id,
+                    label: v.label,
+                    href: v.href,
                   }
                 })
               }
-              return false
+              return {
+                id: val.id,
+                label: val.label,
+                href: val.href,
+                knot: secondaryKnot,
+                unfold: true
+              }
+            })
+          }
+          return {
+            id: item.id,
+            label: item.label,
+            href: item.href,
+            knot,
+            unfold: true
+          }
+        })
+
+        // 生成目录一级列表
+        this.chapterList = []
+        this.chapterDetailList.map(item => {
+          this.chapterList.push(item)
+          if (item.knot.length > 0) {
+            item.knot.map(val => {
+              this.chapterList.push({
+                parent: item,
+                ...val
+              })
+              if (val.knot.length > 0) {
+                val.knot.map(v => {
+                  this.chapterList.push({
+                    parent: val,
+                    ...v
+                  })
+                })
+              }
+            })
+          }
+          return {
+            parent: null,
+            ...item
+          }
+        })
+        // 章节变化
+        this.bookRendition.on('rendered', (section) => {
+          console.log('章节变化');
+          this.currentChapterList = this.chapterList.filter(item => {
+            return item.href.split('#')[0] === section.href.split('#')[0]
+          }).map(item => {
+            let offsetTop = 0
+            if (item.href.split('#').length > 1) {
+              let chapterDom = this.bookRendition.getContents(item.href)[0].document.getElementById(item.href.split('#')[1]);
+              offsetTop = chapterDom.offsetTop
             }
-          });
-          if (Object.keys(this.currentChapter).length > 0) {
+            return {
+              offsetTop,
+              ...item
+            }
+          }) 
+          if (this.currentChapterList.length > 0) {
+            this.currentChapter = this.currentChapterList[0]
             this.noteChange()
             const top = $('#chapter' + this.currentChapter.id)[0].offsetTop
             if ($('#record')[0].scrollTop > top + 30) {
@@ -182,16 +211,39 @@ export default {
               }, 300)
             }
           }
+          let link = this.bookRendition.getContents()[0].content.getElementsByTagName(
+              'a');
+          if (link.length > 0) {
+            for (let i = 0; i < link.length; i++) {
+              link[i].addEventListener('click', (e) => {
+                e.preventDefault();
+                let href, directory
+                if (this.book.path.directory === '//') {
+                  directory = '/'
+                } else {
+                  directory = this.book.path.directory
+                }
+                if (!e.target.href) { 
+                  if (!e.target.parentNode.href) {
+                    href = e.target.parentNode.parentNode.pathname.split(directory)[1] + e.target.parentNode.parentNode.hash
+                  } else {
+                    href = e.target.parentNode.pathname.split(directory)[1] + e.target.parentNode.hash
+                  }
+                } else {
+                  href = e.target.pathname.split(directory)[1] + e.target.hash
+                }
+                this.goToChapter({href})
+              }, false);
+            }
+          }
         });
         // 页码变化
         this.bookRendition.on('relocated', location => {
           console.log('页码变化');
           this.nextStatus = !location.atEnd;
           this.prevStatus = !location.atStart;
-          // this.bookmarksChange();
           this.toolTipsStatus = false;
           this.annotateStatus = false;
-          // this.clearSelectInfo();
         });
         // 布局变化
         this.bookRendition.on('layout', () => {
@@ -600,10 +652,17 @@ export default {
         this.bookRendition.next();
       }
     },
-     // 章节跳转
-    goToChapter(href) {
-      this.bookRendition.display(href);
-      this.toggleDrawer(null, true);
+    // 章节跳转
+    goToChapter(item) {
+      this.bookRendition.display(item.href).then(() => {
+        let offsetTop = 0
+        if (item.href.split('#').length > 1) {
+          offsetTop = this.bookRendition.getContents(item.href)[0].document.getElementById(item.href.split('#')[1]).offsetTop;
+        }
+        $('.el-scrollbar__wrap').animate({ scrollTop: offsetTop }, 500);
+      }).catch(error => {
+        console.log(error)
+      })
     },
     // 章节href转为cfi
     async searchChapter(href) {
@@ -693,9 +752,7 @@ export default {
       setTimeout(() => {
         callback && callback()
       }, 300)
-      // this.bookmarksChange();
-      // this.noteChange();
-      // this.bookRendition.display(this.locations.start.cfi);
+      this.noteChange();
     },
     // 设置字体大小
     setFontSize (value, callback) {
@@ -705,9 +762,7 @@ export default {
       setTimeout(() => {
         callback && callback()
       }, 300)
-      // this.bookmarksChange();
-      // this.noteChange();
-      // this.bookRendition.display(this.locations.start.cfi);
+      this.noteChange();
     },
     // 设置行高
     setLineHeight(value, bg, callback) {
@@ -719,9 +774,7 @@ export default {
       setTimeout(() => {
         callback && callback()
       }, 300)
-      // this.bookmarksChange();
-      // this.noteChange();
-      // this.bookRendition.display(this.locations.start.cfi);
+      this.noteChange();
     },
     // 设置背景颜色
     setBackground(value, callback) {
@@ -732,9 +785,7 @@ export default {
       setTimeout(() => {
         callback && callback()
       }, 300)
-      // this.bookmarksChange();
-      // this.noteChange();
-      // this.bookRendition.display(this.locations.start.cfi);
+      this.noteChange();
     },
     // 注册主题
     registerTheme(value) {
@@ -845,6 +896,11 @@ export default {
     },
     // 滚动事件
     handleScroll () {
+      const scrollTop = $('.el-scrollbar__wrap').scrollTop()
+      const list = this.currentChapterList.filter(item => {
+        return scrollTop >= item.offsetTop
+      }) 
+      this.currentChapter = list[list.length - 1]
       if (this.wordSelectedCfi) {
         this.bookRendition.getContents(this.wordSelectedCfi)[0].document.getSelection().empty();
       }

@@ -18,17 +18,27 @@
       <el-scrollbar id="scrollCover" class="app-el-scrollbar"
         ref="componentScrollBar"> 
         <div id="content" class="content clearfix">
-          <div id="record" class="record">
+          <div id="record" class="record scrollbar">
             <div class="list">
-              <div class="chapter" v-for="(item, index) in chapterDetailList" :key="index">
+              <div class="chapter" v-for="item in chapterDetailList" :key="item.id">
                 <div :id="'chapter' + item.id" class="title clearfix">
-                  <p :class="(currentChapter && currentChapter.href === item.href) ? 'wordOverFlow active' : 'wordOverFlow'" :title="item.label" @click="goToChapter(item.cfi)">{{ item.label }}</p>
+                  <p :class="(currentChapter && currentChapter.href === item.href) ? 'wordOverFlow active' : 'wordOverFlow'" :title="item.label" @click="goToChapter(item)">{{ item.label }}</p>
                   <i :class="item.unfold ? 'el-icon-arrow-up' : 'el-icon-arrow-down'" v-if="item.knot.length > 0" @click="item.unfold = !item.unfold"></i>
                 </div>
                 <el-collapse-transition>
                   <div class="knot" v-if="item.knot.length > 0" v-show="item.unfold">
-                    <div :id="'chapter' + val.id" class="title secondary" v-for="(val, ind) in item.knot" :key="index + '' + ind">
-                      <p :class="(currentChapter && currentChapter.href === val.href) ? 'wordOverFlow active' : 'wordOverFlow'" :title="val.label" @click="goToChapter(val.cfi)">{{ val.label }}</p>
+                    <div class="chapter" v-for="val in item.knot" :key="val.id">
+                      <div :id="'chapter' + val.id" class="title clearfix secondary">
+                        <p :class="(currentChapter && currentChapter.href === val.href) ? 'wordOverFlow active' : 'wordOverFlow'" :title="val.label" @click="goToChapter(val)">{{ val.label }}</p>
+                        <i :class="val.unfold ? 'el-icon-arrow-up' : 'el-icon-arrow-down'" v-if="val.knot.length > 0" @click="val.unfold = !val.unfold"></i>
+                      </div>
+                      <div class="knot" v-if="val.knot.length > 0" v-show="val.unfold">
+                        <div class="chapter" v-for="v in val.knot" :key="v.id">
+                          <div :id="'chapter' + v.id" class="title clearfix secondary">
+                            <p :class="(currentChapter && currentChapter.href === v.href) ? 'wordOverFlow active' : 'wordOverFlow'" :title="v.label" @click="goToChapter(v)">{{ v.label }}</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </el-collapse-transition>
@@ -78,7 +88,6 @@
         <p @click="openAnnotateDialog()">批注</p>
       </div>
 		</div>
-    <p class="test" :style="{'top': testTop + 'px','left': testLeft + 'px'}"></p>
 
     <!-- 笔记表单 -->
     <div id="noteForm" class="top" v-if="noteFormStatus"

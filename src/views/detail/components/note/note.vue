@@ -1,6 +1,6 @@
 <template>
   <div id='note'>
-    <div class="list" v-if="list.length > 0" v-loading="loading">
+    <div class="list scrollbar" v-if="list.length > 0" v-loading="loading">
       <div class="note clearfix" v-for="(item, index) in list" :key="index">
         <p class="clearfix">
           <span><i class="el-icon-edit"></i>{{ item.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
@@ -71,8 +71,19 @@ export default {
       });
     },
     delNote(id){
-      this.$emit('delNote', id, () => {
-        this.getNoteList()
+      this.$confirm('此操作将删除该笔记, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$emit('delNote', id, () => {
+          this.getNoteList()
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
       });
     },
     gotoNotePosition(cfi) {
@@ -96,25 +107,6 @@ export default {
     overflow-x: hidden;
     overflow-y: auto;
     margin-bottom: 30px;
-    &::-webkit-scrollbar{
-      display: block;
-      width: 6px;
-      height: 1px;
-    }
-    &::-webkit-scrollbar-track{
-      background: #dddddd;
-      border-radius: 2px;
-    }
-    &::-webkit-scrollbar-thumb{
-      background: rgba(144, 147, 153, .3);
-      border-radius: 6px;
-    }
-    &::-webkit-scrollbar-thumb:hover{
-      background: rgba(144, 147, 153, .5);
-    }
-    &::-webkit-scrollbar-corner{
-      background: #dddddd;
-    }
     .note {
       padding: 10px 16px 10px 20px;
       color: #999999;

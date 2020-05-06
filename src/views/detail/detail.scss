@@ -60,43 +60,21 @@
     overflow-x: hidden;
     overflow-y: auto;
     .content { 
-      width: 1110px;
+      width: 1200px;
       min-height: calc(100vh - 120px);
       padding: 50px 0;
       margin: 0 auto;
       .record {
-        width: 206px;
+        width: 256px;
         height: calc(100vh - 180px);
         position: fixed;
         top: 110px;
-        left: calc(50vw - 555px);
+        left: calc(50vw - 600px);
         overflow-x: hidden;
         overflow-y: auto;
         z-index: 1;
-        border-right: apx solid  rgba(144, 147, 153, .5);
-        /*修改滚动条样式*/
-        &::-webkit-scrollbar{
-          display: block;
-          width: 6px;
-          height: 1px;
-        }
-        &::-webkit-scrollbar-track{
-          background: #dddddd;
-          border-radius: 2px;
-        }
-        &::-webkit-scrollbar-thumb{
-          background: rgba(144, 147, 153, .3);
-          border-radius: 6px;
-        }
-        &::-webkit-scrollbar-thumb:hover{
-          background: rgba(144, 147, 153, .5);
-        }
-        &::-webkit-scrollbar-corner{
-          background: #dddddd;
-        }
-        
         .list {
-          width: 200px;
+          width: 250px;
           .chapter {
             width: 100%;
             .title {
@@ -126,9 +104,17 @@
               overflow: hidden;
               .title {
                 p {
-                  margin-left: 20px;
+                  padding-left: 20px;
                   font-size: 14px;
                   line-height: 30px;
+                }
+                i {
+                  margin: 0;
+                }
+              }
+              .knot {
+                p {
+                  padding-left: 40px;
                 }
               }
             }
@@ -140,15 +126,15 @@
         height: calc(100vh - 180px);
         position: fixed;
         top: 110px;
-        left: calc(50vw - 355px);
+        left: calc(50vw - 350px);
         border-radius: 2px;
         background: #dddddd;
       }
       .article {
-        width: 900px;
+        width: 950px;
         min-height: calc(100vh - 220px);
         float: left;
-        margin-left: 220px;
+        margin-left: 270px;
         .handleBox {
           width: 100%;
           padding: 10px 0;
@@ -513,13 +499,5 @@
       bottom: 0;
       margin: auto;
     }
-  }
-  .test{
-    display: block;
-    width: 5px;
-    height: 5px;
-    position: fixed;
-    z-index: 10000;
-    background-color: red;
   }
 }

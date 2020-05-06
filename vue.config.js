@@ -23,7 +23,7 @@ module.exports = {
     proxy: {
       '/api': {
         // 目标 API 地址
-        target: 'http://127.0.0.1:7002',
+        target: 'http://127.0.0.1:7001',
         // target: 'http://150.109.105.237:7001',
         // target: 'http://172.16.30.33:9004',
         // 如果要代理 websockets
@@ -33,7 +33,7 @@ module.exports = {
       },
       '/public': {
         // 目标 API 地址
-        target: 'http://127.0.0.1:7002',
+        target: 'http://127.0.0.1:7001',
         // target: 'http://150.109.105.237:7001',
         // target: 'http://172.16.30.33:9004',
         // 如果要代理 websockets

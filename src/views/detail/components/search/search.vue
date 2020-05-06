@@ -5,7 +5,7 @@
         <el-input placeholder="全文搜索(区分大小写)" prefix-icon="el-icon-search" v-model="keyword"
           size="large" @keyup.enter.native="search" style="width: 100%"></el-input>
 			</div>
-			<div class="list" v-if="result.length > 0">
+			<div class="list scrollbar" v-if="result.length > 0">
 				<div class="result clearfix" v-for="(item, index) in result" :key="index">
 					<p class="wordOverflow3" @click="gotoResult(item.cfi)" v-html="item.html"></p>
 				</div>
@@ -109,26 +109,6 @@ export default {
       overflow-x: hidden;
       overflow-y: auto;
       margin-bottom: 30px;
-      &::-webkit-scrollbar{
-        display: block;
-        width: 6px;
-        height: 1px;
-      }
-      &::-webkit-scrollbar-track{
-        background: #dddddd;
-        border-radius: 2px;
-      }
-      &::-webkit-scrollbar-thumb{
-        background: rgba(144, 147, 153, .3);
-        border-radius: 6px;
-      }
-      &::-webkit-scrollbar-thumb:hover{
-        background: rgba(144, 147, 153, .5);
-      }
-      &::-webkit-scrollbar-corner{
-        background: #dddddd;
-      }
-
 			.result {
 				padding: 10px 28px 10px 24px;
 				border-bottom: 1px solid rgba(90, 93, 109, 0.1);

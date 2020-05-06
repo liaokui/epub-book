@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     // 清空后查询
-    clearList() {
+    clearList(){
       this.page.num = 0;
       this.loading = true;
       this.noMore = false;
@@ -86,32 +86,43 @@ export default {
       const params = {
         'id': id
       }
-      removeBook(params).then(res => {
-        if (res && res.status === 'success') {
-          this.$message({
-            message: res.msg,
-            type: 'success'
-          })
-          this.clearList()
-        } else {
-           this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      }, error => {
-        this.message.error(error)
-        this.loading = false;
+      this.$confirm('此操作将删除该图书, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        removeBook(params).then(res => {
+          if (res && res.status === 'success') {
+            this.$message({
+              message: res.msg,
+              type: 'success'
+            })
+            this.clearList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }, error => {
+          this.message.error(error)
+          this.loading = false;
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
       });
     },
-    exit () {
+    exit(){
       removeToken()
       removeUsername()
       removeUid()
       this.$router.push({path: '/login'});
     },
     // 滚动事件
-    handleScroll () {
+    handleScroll() {
       const height = document.getElementById('scrollCover').
           querySelector('.el-scrollbar__bar').offsetTop;
 
@@ -136,7 +147,7 @@ export default {
     bookHandleChange(file, fileList) {
       this.uploadFileList = fileList.slice();
     },
-    bookHandleSuccess (response) {
+    bookHandleSuccess(response) {
       if (response && response.status === 'success') {
         this.$message({
           message: response.msg,
@@ -152,7 +163,7 @@ export default {
         this.isUploading = false;
       }
     },
-    async beforeBookUpload (file) {
+    async beforeBookUpload(file) {
       if (file && (file.type === 'application/epub' || file.type === 'application/epub+zip')) {
         let title,cover
         const book = ePub(file);
@@ -172,15 +183,15 @@ export default {
         return false;
       }
     },
-    handleError() {
+    handleError(){
       this.isUploading = false;
       this.$message.error('上传出错');
     },
-    delUploadingBook() {
+    delUploadingBook(){
       this.isUploading = false;
       this.$refs.uploadBook.abort();
     },
-    init () {
+    init() {
       window.addEventListener('scroll', this.handleScroll, true);
     }
   },

@@ -7,7 +7,7 @@ import router from './router/index'
 import './styles/index.scss'
 import './assets/icon/iconfont.css'
 
-import { Message, Image, Tag, Backtop, Scrollbar, Card, Loading, Input, Form, FormItem, Progress, Upload, Button, Drawer, Select, Option} from 'element-ui';
+import { Message, Image, Tag, Backtop, Scrollbar, Card, Loading, Input, Form, FormItem, Progress, Upload, Button, Drawer, Select, Option, MessageBox } from 'element-ui';
 import 'normalize.css'
 // fade/zoom 等
 import 'element-ui/lib/theme-chalk/base.css';
@@ -38,6 +38,7 @@ Vue.component(CollapseTransition.name, CollapseTransition)
 
 
 Vue.prototype.$message = Message;
+Vue.prototype.$confirm = MessageBox.confirm;
 
 Vue.config.productionTip = false
 
