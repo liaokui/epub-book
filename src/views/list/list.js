@@ -162,6 +162,7 @@ export default {
         })
         this.isUploading = false;
       }
+      this.progress = 0
     },
     async beforeBookUpload(file) {
       if (file && (file.type === 'application/epub' || file.type === 'application/epub+zip')) {

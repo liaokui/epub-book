@@ -91,7 +91,7 @@ export default {
       }
       getBookDetail(params).then(res => {
         if (res && res.status === 'success') {
-          this.url = res.data.url
+          this.url = process.env.VUE_APP_imgReadUrl + res.data.url
           this.title = res.data.title
           this.bookInit(this.url)
         }else{
