@@ -52,12 +52,12 @@
               <p class="next" v-if="nextStatus" @click="next()">下一章<i class="el-icon-arrow-right"></i></p>
             </div>
             <div :class="'bookBox ' + theme">
-              <div id="book" v-loading="bookLoading"></div>
+              <div id="book" v-loading="bookLoading" element-loading-text="首次加载时间可能较长~~~"></div>
             </div>
           </div>
         </div>
         <footer>
-          <p>Copyright © 2018 LK. All rights reserved.</p>
+          <p>Copyright © 2020 LK. All rights reserved.</p>
         </footer>
         <el-backtop target=".el-scrollbar .el-scrollbar__wrap"
                     :bottom="40"

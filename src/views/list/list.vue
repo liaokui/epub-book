@@ -69,7 +69,7 @@
           <p v-if="noMore" class="nomore">没有更多了~~</p>
         </div>
         <footer>
-          <p>Copyright © 2018 LK. All rights reserved.</p>
+          <p>Copyright © 2020 LK. All rights reserved.</p>
         </footer>
         <el-backtop target=".el-scrollbar .el-scrollbar__wrap"
                     :bottom="40"
