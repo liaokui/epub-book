@@ -217,20 +217,27 @@ export default {
             for (let i = 0; i < link.length; i++) {
               link[i].addEventListener('click', (e) => {
                 e.preventDefault();
-                let href, directory
+                let href, directory, pathname
                 if (this.book.path.directory === '//') {
                   directory = '/'
                 } else {
                   directory = this.book.path.directory
                 }
+                console.log([e.target])
                 if (!e.target.href) { 
                   if (!e.target.parentNode.href) {
-                    href = e.target.parentNode.parentNode.pathname.split(directory)[1] + e.target.parentNode.parentNode.hash
+                    pathname = e.target.parentNode.parentNode.pathname.split(directory)
+                    pathname.splice(0, 1)
+                    href = pathname.join('/') + e.target.parentNode.parentNode.hash
                   } else {
-                    href = e.target.parentNode.pathname.split(directory)[1] + e.target.parentNode.hash
+                    pathname = e.target.parentNode.pathname.split(directory)
+                    pathname.splice(0, 1)
+                    href = pathname.join('/') + e.target.parentNode.hash
                   }
                 } else {
-                  href = e.target.pathname.split(directory)[1] + e.target.hash
+                  pathname = e.target.pathname.split(directory)
+                  pathname.splice(0, 1)
+                  href = pathname.join('/') + e.target.hash
                 }
                 this.goToChapter({href})
               }, false);
@@ -653,7 +660,7 @@ export default {
       }
     },
     // 章节跳转
-    goToChapter(item) {
+    goToChapter (item) {
       this.bookRendition.display(item.href).then(() => {
         let offsetTop = 0
         if (item.href.split('#').length > 1) {
