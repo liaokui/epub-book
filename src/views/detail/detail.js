@@ -466,7 +466,9 @@ export default {
     // 页面变化笔记回显
     noteChange() {
       this.getNoteList(() => {
+        console.log(this.noteList)
         this.noteList.map(item => {
+          console.log(item.cfi)
           this.bookRendition.annotations.remove(item.cfi, 'underline');
           this.bookRendition.annotations.add('underline', item.cfi, {
             id: item._id,
@@ -611,7 +613,7 @@ export default {
       });
     },
     // 删除笔记
-    deleteNote(id, done) {
+    deleteNote(id, cfi, done) {
       const params = {
         'bookId': this.id,
         'id': id || this.wordSelectedNoteId,
@@ -619,7 +621,7 @@ export default {
       removeNote(params).then(res => {
         if (res && res.status === 'success') {
           done && done()
-          this.bookRendition.annotations.remove(this.wordSelectedCfi, 'underline');
+          this.bookRendition.annotations.remove(cfi ? cfi : this.wordSelectedCfi, 'underline');
           this.noteChange();
           if (this.wordMenuStatus || this.noteFormStatus) {
             this.wordMenuStatus = false;

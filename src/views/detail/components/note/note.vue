@@ -4,7 +4,7 @@
       <div class="note clearfix" v-for="(item, index) in list" :key="index">
         <p class="clearfix">
           <span><i class="el-icon-edit"></i>{{ item.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-          <i class="el-icon-delete delIcon" @click="delNote(item._id)"></i>
+          <i class="el-icon-delete delIcon" @click="delNote(item._id, item.cfi)"></i>
           <!-- <span>{{ 1 }}</span> -->
         </p>
         <p class="content wordOverFlow2" @click="gotoNotePosition(item.cfi)">{{ item.word }}</p>
@@ -70,13 +70,13 @@ export default {
         this.loading = false
       });
     },
-    delNote(id){
+    delNote(id, cfi){
       this.$confirm('此操作将删除该笔记, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$emit('delNote', id, () => {
+        this.$emit('delNote', id, cfi, () => {
           this.getNoteList()
         });
       }).catch(() => {
