@@ -33,6 +33,7 @@
                      @click="handleForm('loginForm')">登陆</el-button>
         </el-form-item>
       </el-form>
+      <p class="tips">账号： admin 密码：123456</p>
     </el-card>
   </div>
 </template>
