@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { MessageBox} from 'element-ui';
-import {getToken} from '@/utils/auth';
+import { getToken, getCsrfToken } from '@/utils/auth';
 import router from '../router';
 // 创建axios实例
 const service = axios.create({
@@ -36,6 +36,12 @@ service.interceptors.request.use(config => {
     config.headers['Authorization'] = getToken(); 
   }
   delete config.noToken;
+
+  // 带上csrfToken
+  if (getCsrfToken()) {
+    config.headers['x-csrf-token'] = getCsrfToken(); 
+  }
+
   return config;
   }, error => {
     Promise.reject(error);
@@ -51,6 +57,21 @@ service.interceptors.response.use(
     let data = error.response;
     if (data.status == 401) {
       MessageBox.confirm('登录信息失效,将转跳登录页面', '提示', {
+        confirmButtonText: '确定',
+        type: 'warning',
+        showCancelButton: false,
+        showClose: false,
+      }).then(() => {
+        setTimeout(() => {
+          router.push({path: '/login'});
+        }, 500);
+      }).catch(() => {
+        setTimeout(() => {
+          router.push({path: '/login'});
+        }, 500);
+      });
+    } else if(data.status == 403) {
+      MessageBox.confirm('服务器验证失败', '提示', {
         confirmButtonText: '确定',
         type: 'warning',
         showCancelButton: false,

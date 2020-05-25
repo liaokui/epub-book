@@ -1,4 +1,4 @@
-import { getToken, removeToken, removeUid, removeUsername } from '../../utils/auth'
+import { getToken, removeToken, removeCsrfToken, removeUid, removeUsername } from '../../utils/auth'
 import { getBookList, removeBook } from './list.service'
 
 const ePub = window.ePub;
@@ -119,6 +119,7 @@ export default {
       removeToken()
       removeUsername()
       removeUid()
+      removeCsrfToken()
       this.$router.push({path: '/login'});
     },
     // 滚动事件
