@@ -20,7 +20,8 @@
               <div class="cover">
                 <p class="delBtn" @click="delBook(item._id)"><i class="el-icon-delete"></i></p>
                 <router-link :to="{'path': '/detail', 'query': {'id': item._id}}">
-                  <el-image :src="imgReadUrl + item.cover" fit="cover" :preview-src-list="[imgReadUrl + item.cover]"></el-image>
+                  <el-image :src="imgReadUrl + item.cover" fit="cover" :preview-src-list="[imgReadUrl + item.cover]"
+                  :lazy="true" scroll-container=".el-scrollbar .el-scrollbar__wrap"></el-image>
                 </router-link>
               </div> 
             </el-card>
