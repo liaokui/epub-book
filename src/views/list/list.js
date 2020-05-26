@@ -188,10 +188,12 @@ export default {
     },
     handleError(){
       this.isUploading = false;
+      this.progress = 0
       this.$message.error('上传出错');
     },
     delUploadingBook(){
       this.isUploading = false;
+      this.progress = 0
       this.$refs.uploadBook.abort();
     },
     init() {
