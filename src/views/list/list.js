@@ -1,4 +1,4 @@
-import { getToken, removeToken, removeCsrfToken, removeUid, removeUsername } from '../../utils/auth'
+import { getToken, getCsrfToken, removeToken, removeCsrfToken, removeUid, removeUsername } from '../../utils/auth'
 import { getBookList, removeBook } from './list.service'
 
 const ePub = window.ePub;
@@ -8,7 +8,8 @@ export default {
     return {
       uploadAction: '/api/upload/epub',
       uploadHeaders: {
-        'Authorization': getToken()
+        'Authorization': getToken(),
+        'x-csrf-token': getCsrfToken()
       },
       keyword: null,
       isUploading: false,
