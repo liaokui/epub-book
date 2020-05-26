@@ -1,6 +1,6 @@
 module.exports = {
-  // publicPath: process.env.NODE_ENV === 'production' ? './public/client/dist/' : '/',
-  publicPath: '/',
+  publicPath: process.env.NODE_ENV === 'production' ? './public/client/dist/' : '/',
+  // publicPath: '/',
   assetsDir: 'static',
   lintOnSave: true,
   productionSourceMap: false,
